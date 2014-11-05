@@ -1,3 +1,5 @@
+import random
+
 board = []
 board.append("  ___")
 board.append("  | |")
@@ -6,11 +8,24 @@ board.append("    |")
 board.append("    |")
 board.append("-----")
 
-answerWord = "Jesus"
-clueWord = []
-guessedLetters = []
-for x in range(len(answerWord)):
-	clueWord.append("_ ")
+difficulty = "easy"
+
+def file_len(fname):
+    with open(fname, "r") as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
+
+def getRandLine(fname, lines):
+	num = random.randint(0,lines)
+	with open(fname, "r") as f:
+		for i, line in enumerate(f):
+			if i == num:
+				if difficulty == "easy" and len(line) > 7:
+					num = random.randint(i, lines)
+					continue
+				return line
+        
 
 def printBoard(board):
 	for row in board:
@@ -42,6 +57,12 @@ def hangTheMan(board, lives):
 	elif lives == 1:
 		#Draw right leg
 		board[4] = " / \\|"
+
+answerWord = getRandLine("words", file_len("words"))
+clueWord = []
+guessedLetters = []
+for x in range(len(answerWord)):
+	clueWord.append("_ ")
 
 def main():
 	lives = 6

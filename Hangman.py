@@ -9,6 +9,8 @@ board.append("    |")
 board.append("-----")
 
 difficulty = "easy"
+EASY_MODE = 5
+MEDIUM_MODE = 10
 
 def file_len(fname):
     with open(fname, "r") as f:
@@ -21,10 +23,16 @@ def getRandLine(fname, lines):
 	with open(fname, "r") as f:
 		for i, line in enumerate(f):
 			if i == num:
-				if difficulty == "easy" and len(line) > 7:
+				if difficulty == "easy" and len(line) > EASY_MODE:
 					num = random.randint(i, lines)
+					print "Word is too hard for Easy mode. Picking another word..."
 					continue
-				return line
+				elif difficulty == "medium" and len(line) > MEDIUM_MODE:
+					num = random.randint(i, lines)
+					print "word is too hard for medium mode. Picking another word..."
+					continue
+				return str(line)
+		return getRandLine(fname, lines)
         
 
 def printBoard(board):
@@ -58,7 +66,7 @@ def hangTheMan(board, lives):
 		#Draw right leg
 		board[4] = " / \\|"
 
-answerWord = getRandLine("words", file_len("words"))
+answerWord = getRandLine("words", file_len("words")).rstrip()
 clueWord = []
 guessedLetters = []
 for x in range(len(answerWord)):
@@ -104,6 +112,7 @@ def main():
 		printBoard(board)
 		print "Game Over!\nThe word was \"" + answerWord + "\""
 	else:
+		printClueWord(clueWord)
 		print "Congratulations! You won!"
 			
 

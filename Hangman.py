@@ -11,8 +11,10 @@ board.append("    |")
 board.append("-----")
 
 
-EASY_MODE = 5
-MEDIUM_MODE = 10
+EASY_MODE = range(3,6)
+MEDIUM_MODE = range(6,11)
+HARD_MODE = range(11,50)
+
 
 def file_len(fname):
     with open(fname, "r") as f:
@@ -25,13 +27,13 @@ def getRandLine(fname, lines, difficulty):
 	with open(fname, "r") as f:
 		for i, line in enumerate(f):
 			if i == num:
-				if difficulty == "easy" and len(line) > EASY_MODE:
+				if difficulty == "easy" and len(line) not in EASY_MODE:
 					num = random.randint(i, lines)
 					continue
-				elif difficulty == "medium" and (len(line) > MEDIUM_MODE or len(line <= EASY_MODE)):
+				elif difficulty == "medium" and (len(line) not in MEDIUM_MODE):
 					num = random.randint(i, lines)
 					continue
-				elif difficulty == "hard" and len(line) < 11:
+				elif difficulty == "hard" and len(line) not in HARD_MODE:
 					num = random.randint(i, lines)
 					continue
 				return str(line)

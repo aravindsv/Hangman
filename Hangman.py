@@ -24,7 +24,24 @@ def printClueWord(clue):
 
 def hangTheMan(board, lives):
 	#TODO:Draw the hungMan parts
-	pass
+	if lives == 6:
+		#Draw Head
+		board[2] = "  O |"
+	elif lives == 5:
+		#Draw Torso
+		board[3] = "  | |"
+	elif lives == 4:
+		#Draw left arm
+		board[2] = " \\O |"
+	elif lives == 3:
+		#Draw right arm
+		board[2] = " \\O/|"
+	elif lives == 2:
+		#Draw left leg
+		board[4] = " /  |"
+	elif lives == 1:
+		#Draw right leg
+		board[4] = " / \\|"
 
 def main():
 	lives = 6
@@ -63,6 +80,7 @@ def main():
 		guessedLetters.append(userGuess)
 
 	if lives == 0:
+		printBoard(board)
 		print "Game Over!\nThe word was \"" + answerWord + "\""
 	else:
 		print "Congratulations! You won!"

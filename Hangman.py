@@ -1,4 +1,6 @@
 import random
+import sys
+import getopt
 
 board = []
 board.append("  ___")
@@ -8,7 +10,7 @@ board.append("    |")
 board.append("    |")
 board.append("-----")
 
-difficulty = "easy"
+
 EASY_MODE = 5
 MEDIUM_MODE = 10
 
@@ -18,21 +20,19 @@ def file_len(fname):
             pass
     return i + 1
 
-def getRandLine(fname, lines):
+def getRandLine(fname, lines, difficulty):
 	num = random.randint(0,lines)
 	with open(fname, "r") as f:
 		for i, line in enumerate(f):
 			if i == num:
 				if difficulty == "easy" and len(line) > EASY_MODE:
 					num = random.randint(i, lines)
-					print "Word is too hard for Easy mode. Picking another word..."
 					continue
-				elif difficulty == "medium" and len(line) > MEDIUM_MODE:
+				elif difficulty == "medium" and (len(line) > MEDIUM_MODE or len(line <= EASY_MODE)):
 					num = random.randint(i, lines)
-					print "word is too hard for medium mode. Picking another word..."
 					continue
 				return str(line)
-		return getRandLine(fname, lines)
+		return getRandLine(fname, lines, difficulty)
         
 
 def printBoard(board):
@@ -66,13 +66,34 @@ def hangTheMan(board, lives):
 		#Draw right leg
 		board[4] = " / \\|"
 
-answerWord = getRandLine("words", file_len("words")).rstrip()
-clueWord = []
-guessedLetters = []
-for x in range(len(answerWord)):
-	clueWord.append("_ ")
+def usage():
+	print """To play Hangman, select a difficulty option with the flags -e for easy, 
+-m for medium, and -h for hard. No flag will default to easy."""
 
-def main():
+
+def main(argv):
+	difficulty = "easy"
+
+	try:                                
+		opts, args = getopt.getopt(argv, "emh", ["easy", "medium", "hard"])
+ 	except:
+		print "There was a usage problem. There shouldn't be"
+	 	usage()
+	 	sys.exit()
+
+	for opt, arg in opts:
+		if opt in ("-e", "--easy"):
+			difficulty = "easy"
+		elif opt in ("-m", "--medium"):
+			difficulty = "medium"
+		elif opt in ("-h", "--hard"):
+			difficulty = "hard"
+
+	answerWord = getRandLine("words", file_len("words"), difficulty).rstrip()
+	clueWord = []
+	guessedLetters = []
+	for x in range(len(answerWord)):
+		clueWord.append("_ ")
 	lives = 6
 	while lives > 0 and clueWord.count("_ ") > 0:
 		printBoard(board)
@@ -117,4 +138,4 @@ def main():
 			
 
 if __name__== "__main__":
-	main()
+	main(sys.argv[1:])

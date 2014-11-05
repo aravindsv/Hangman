@@ -28,14 +28,18 @@ def hangTheMan(board, lives):
 
 def main():
 	lives = 6
-	while lives > 0:
+	while lives > 0 and clueWord.count("_ ") > 0:
 		printBoard(board)
 		print "The word is " + str(len(answerWord)) + " letters long"
 		printClueWord(clueWord)
 		userGuess = raw_input("Guess a letter: ")
 
+		#If user doesn't guess any letter
+		if not userGuess:
+			print "You must guess a letter"
+
 		#If user tries to guess more than a single character
-		if len(userGuess) > 1:
+		elif len(userGuess) > 1:
 			print "You may only guess one letter at a time!"
 
 		#If user guesses a letter they already guessed
@@ -44,13 +48,13 @@ def main():
 
 		#If user guesses an incorrect letter
 		elif answerWord.lower().find(userGuess.lower()) == -1:
-			print "Nope"
+			print "Nope\n"
 			hangTheMan(board, lives)
 			lives -= 1
 
 		#If user guesses a correct letter
 		else:
-			print "Yup"
+			print "Yup\n"
 			for index, letter in enumerate(answerWord):
 				if letter.lower() == userGuess.lower():
 					clueWord[index] = str(letter)
@@ -58,7 +62,10 @@ def main():
 		#Add guess to guessedLetters
 		guessedLetters.append(userGuess)
 
-	print "Game Over!\nThe word was \"" + answerWord + "\""
+	if lives == 0:
+		print "Game Over!\nThe word was \"" + answerWord + "\""
+	else:
+		print "Congratulations! You won!"
 			
 
 if __name__== "__main__":

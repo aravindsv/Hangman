@@ -31,6 +31,9 @@ def getRandLine(fname, lines, difficulty):
 				elif difficulty == "medium" and (len(line) > MEDIUM_MODE or len(line <= EASY_MODE)):
 					num = random.randint(i, lines)
 					continue
+				elif difficulty == "medium" and len(line) < 11:
+					num = random.randint(i, lines)
+					continue
 				return str(line)
 		return getRandLine(fname, lines, difficulty)
         
